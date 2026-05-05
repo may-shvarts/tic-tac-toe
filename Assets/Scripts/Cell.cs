@@ -14,7 +14,14 @@ namespace TicTacToe
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            GameEvents.CellClicked?.Invoke(this);
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                GameEvents.CancelClick?.Invoke(this);
+            }
+            else
+            {
+                GameEvents.CellClicked?.Invoke(this);
+            }
         }
 
         public void SetMark(string mark)

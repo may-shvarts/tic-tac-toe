@@ -8,6 +8,8 @@ namespace TicTacToe
 
         private string _currentPlayer = "X";
         private bool _isGameOver;
+        
+        private Cell _currentCell;
 
         private static readonly int[][] WinningLines = new int[][]
         {
@@ -24,6 +26,7 @@ namespace TicTacToe
         private void OnEnable()
         {
             GameEvents.CellClicked += OnCellClicked;
+            GameEvents.CancelClick += OnCancelClicked;
         }
 
         private void OnDisable()
@@ -31,6 +34,18 @@ namespace TicTacToe
             GameEvents.CellClicked -= OnCellClicked;
         }
 
+        private void OnCancelClicked(Cell cell)
+        {
+            if (_isGameOver)
+            {
+                return;
+            }
+            if (cell == _currentCell)
+            {
+                cell.Clear();
+                ChangeMarkChecker();
+            }
+        }
         private void OnCellClicked(Cell cell)
         {
             if (_isGameOver)
@@ -46,6 +61,7 @@ namespace TicTacToe
             }
 
             cell.SetMark(_currentPlayer);
+            _currentCell = cell;
             GameEvents.MoveMade?.Invoke();
 
             string winner = CheckWinner();
@@ -65,9 +81,13 @@ namespace TicTacToe
                 return;
             }
 
-            _currentPlayer = _currentPlayer == "X" ? "O" : "X";
+            ChangeMarkChecker();
         }
 
+        private void ChangeMarkChecker()
+        {
+            _currentPlayer = _currentPlayer == "X" ? "O" : "X";
+        }
         private void ResetBoard()
         {
             for (int i = 0; i < _cells.Length; i++)

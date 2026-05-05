@@ -12,6 +12,8 @@ namespace TicTacToe
         public static Action GameDrawn;
         public static Action<int, int> ScoreChanged;
         public static Action<string> ResultReady;
+        
+        public static Action<Cell> CancelClick;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetOnPlay()
